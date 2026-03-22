@@ -65,7 +65,6 @@
       width: 100vw;
       height: 100vh;
       object-fit: contain;
-      z-index: 2;
     }
 
     .final-img {
@@ -76,7 +75,6 @@
       border-radius: 20px;
       opacity: 0;
       transition: opacity 2s ease;
-      z-index: 2;
     }
 
     .mostrar { opacity: 1; }
@@ -92,22 +90,16 @@
     }
 
     @keyframes subir {
-      0% { transform: translateY(0) scale(1); opacity: 0.7; }
-      100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+      0% { transform: translateY(0); opacity: 0.7; }
+      100% { transform: translateY(-110vh); opacity: 0; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- AUDIOS -->
-<audio id="audio1" loop>
-  <source src="20.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="audio2" loop>
-  <source src="10.mp3" type="audio/mpeg">
-</audio>
+<audio id="audio1" loop src="20.mp3"></audio>
+<audio id="audio2" loop src="10.mp3"></audio>
 
 <!-- PANTALLA 1 -->
 <div class="pantalla" id="p1">
@@ -137,10 +129,10 @@
 <script>
   const audio1 = document.getElementById("audio1");
   const audio2 = document.getElementById("audio2");
+  const video = document.getElementById("video");
   const p1 = document.getElementById("p1");
   const p2 = document.getElementById("p2");
   const p3 = document.getElementById("p3");
-  const video = document.getElementById("video");
   const imgFinal = document.getElementById("imagenFinal");
 
   let clicks = 0;
@@ -161,42 +153,40 @@
 
       video.play();
     }
+  });
 
-    else if (clicks === 3) {
-      // 🔇 MATAR COMPLETAMENTE EL VIDEO (audio incluido)
-      video.pause();
-      video.muted = true;
-      video.currentTime = 0;
-      video.removeAttribute("src");
-      video.load();
+  // 🎬 CUANDO TERMINA EL VIDEO
+  video.addEventListener("ended", () => {
+    // matar video completamente
+    video.pause();
+    video.muted = true;
+    video.removeAttribute("src");
+    video.load();
 
-      // cambiar pantalla
-      p2.style.display = "none";
-      p3.style.display = "flex";
+    // cambiar pantalla
+    p2.style.display = "none";
+    p3.style.display = "flex";
 
-      // 🎵 AUDIO INMEDIATO
-      audio2.currentTime = 0;
-      audio2.play();
+    // 🎵 audio final
+    audio2.currentTime = 0;
+    audio2.play();
 
-      // mostrar imagen con delay
-      setTimeout(() => {
-        imgFinal.classList.add("mostrar");
-      }, 2000);
-    }
+    // 🖼️ imagen a los 3 segundos
+    setTimeout(() => {
+      imgFinal.classList.add("mostrar");
+    }, 3000);
   });
 
   // 💗 corazones
   for (let i = 0; i < 100; i++) {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "♥";
-
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (15 + Math.random() * 30) + "px";
-    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-    heart.style.animationDelay = Math.random() * 5 + "s";
-
-    document.body.appendChild(heart);
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "♥";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = (15 + Math.random() * 30) + "px";
+    h.style.animationDuration = (4 + Math.random() * 4) + "s";
+    h.style.animationDelay = Math.random() * 5 + "s";
+    document.body.appendChild(h);
   }
 </script>
 
